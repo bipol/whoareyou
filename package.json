@@ -1,0 +1,16 @@
+{
+  "name": "whoareyou",
+  "version": "1.0.0",
+  "description": "web application that snoops on users",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.13.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "bipol",
+  "license": "MIT"
+}
