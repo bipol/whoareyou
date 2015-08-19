@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 
 <!-- bootstrap -->
-<link href="static/bower_components/bootstrap/dist/bootstrap.min.css" rel="stylesheet">
+<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/my.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
 
-<p> testing </p>
+<div class="container center" ng-app="app">
+	<h1> who are you? </h1>
+	<form id="search" ng-controller="searchCtrl" ng-submit="submit(name)">
+			<div class="row">
+				<div class="form-group col-lg-4 col-lg-offset-4">
+				  <input class="form-control" type="text" name="name" ng-model="name">
+				</div>
+			</div>
+			<a ng-repeat="hit in hits" href="{{hit}}" ng-cloak>{{hit}}</a>
+			<p ng-if="hits == false">Nothing was found...</p>
+	</form>
+</div>
 
 <!-- jquery -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="app.js"></script>
 
 <!-- bootstrap js -->
-<script src="bower_components/bootstrap/dist/bootstrap.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

@@ -1,0 +1,7 @@
+http://falconframework.org/
+^ use this above
+create an endpoint - get_hits w/ params user: username
+                      returns json { hits: [url, url, ...]}
+
+## To-Do
+* 

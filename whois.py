@@ -1,69 +1,74 @@
 import requests, sys
+from itertools import permutations
 import grequests
 import concurrent.futures
 
-if len(sys.argv) == 1:
-    print("usage: python3 whoareyou [name name name etc]", file=sys.stderr)
-    sys.exit() 
+def create_name_permutations():
+    new_names = []
 
-names = sys.argv[1:] 
+    first_name = input("first name? ")
+    last_name = input("last name? ")
+    dob = input("year of birth? ")
 
+    new_names.append(permutations( [first_name, last_name]))
+    new_names.append(permutations( [first_name[0], last_name]))
+    new_names.append(permutations( [first_name, last_name[0]]))
+    new_names.append(permutations( [first_name, last_name, dob]))
+    new_names.append(permutations( [first_name[0], last_name, dob]))
+    new_names.append(permutations( [first_name, last_name[0], dob]))
 
-green = "\033[92m"
-red = "\033[91m"
-endc = "\033[0m"
-ul = "\033[4m"
+    gen_perm = []
+    for i in range(len(new_names)):
+        gen_perm.extend(list(map("".join, new_names[i])))
 
-green_checkmark = green + "\u2713" + endc
-red_x = red + "\u2717" + endc
+    return gen_perm
 
-#def whois(name):
-#    urls = [
-#            ("reddit: ", "https://www.reddit.com/user/" + name),
-#            ("twitter: ", "https://twitter.com/" + name),
-#            ("instagram: ", "https://instagram.com/" + name),
-#            ("facebook: ", "https://facebook.com/" + name),
-#            ("youtube: ", "https://youtube.com/" + name),
-#            ("imgur: ", "https://imgur.com/" + name),
-#            ]
-#    data = []
-#    data.append('\n' + "who is " + ul + green + name + endc + '\n')
-#    rs = [grequests.get(u[1]) for u in urls]
-#    responses = grequests.map(rs)
-#
-#    for i in range(len(responses)):
-#        if responses[i].status_code == 200:
-#            data.append('\t' + urls[i][0] + '\t' + green_checkmark + '\t' + urls[i][1])
-#        else:
-#           data.append('\t' + urls[i][0] + '\t' + red_x)
-#
-#    return '\n'.join(data)
-#
-#with concurrent.futures.ThreadPoolExecutor(max_workers=len(names)) as e:
-#    future_to_data = {e.submit(whois,name)): name for name in names}
-#    for future in concurrent.futures.as_completed(future_to_data):
-#        print(future.result())
+def main():
 
-for name in names:
-    urls = [
-            ("reddit: ", "https://www.reddit.com/user/" + name),
-            ("twitter: ", "https://twitter.com/" + name),
-            ("instagram: ", "https://instagram.com/" + name),
-            ("facebook: ", "https://facebook.com/" + name),
-            ("youtube: ", "https://youtube.com/" + name),
-            ("imgur: ", "https://imgur.com/" + name),
-            ]
+    names = list(sys.argv[1:])
 
-    print('\n' + "who is ", ul, green, name, endc, '\n')
-    rs = [grequests.get(u[1]) for u in urls]
-    responses = grequests.map(rs)
+    if len(sys.argv) == 1:
+        print("usage: python3 whoareyou [name name name etc]", file=sys.stderr)
+        sys.exit() 
+    elif sys.argv[1] in ['personal', '-p']:
+        names.pop()
+        names.extend(create_name_permutations())
 
-    for i in range(len(responses)):
-        if responses[i].status_code == 200:
-            print('\t', urls[i][0], '\t', green_checkmark, '\t', urls[i][1])
-        else:
-            print('\t', urls[i][0], '\t', red_x)
+    green = "\033[92m"
+    red = "\033[91m"
+    endc = "\033[0m"
+    ul = "\033[4m"
 
-print('\n' + "done.")
+    green_checkmark = green + "\u2713" + endc
+    red_x = red + "\u2717" + endc
+
+    print(" snooping around..." + '\n')
+
+    for name in names:
+        urls = [
+                ("reddit: ", "https://www.reddit.com/user/" + name),
+                ("twitter: ", "https://twitter.com/" + name),
+                ("instagram: ", "https://instagram.com/" + name),
+                ("facebook: ", "https://facebook.com/" + name),
+                ("youtube: ", "https://youtube.com/" + name),
+                ("imgur: ", "https://imgur.com/" + name),
+                ]
+
+        rs = [grequests.get(u[1]) for u in urls]
+        responses = grequests.map(rs)
+
+        if len(responses) > 1:
+            print( "i found this for", name, ":")
+            
+        for i in range(len(responses)):
+            if responses[i].status_code == 200:
+                print('\t', urls[i][0], '\t', green_checkmark, '\t', urls[i][1])
+            #else:
+            #    print('\t', urls[i][0], '\t', red_x)
+
+    print('\n' + "done.")
+
+if __name__ == '__main__':
+    main()
 
 
