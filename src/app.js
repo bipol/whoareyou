@@ -1,18 +1,41 @@
-angular.module('app', [ 'ui.bootstrap'
+angular.module('app', [
+  'ui.bootstrap',
+  'ui.router'
 ]);
 
 
-angular.module('app').controller('searchCtrl', [ '$scope', 'search', function($scope, search) {
+angular.module('app').controller('searchCtrl', [ '$scope', 'search', 'socket', function($scope, search, socket) {
+
+    $scope.hits = [];
 
     $scope.submit = function(name) {
-      console.log('form submitted with name', name);
-      search.whois(name);
+      socket.emit('usernames', {'name': name});
     };
-    $scope.hits = search.hits;
 
-    $scope.$watch(function(){ return search.hits }, function(new_val) {
-        $scope.hits = new_val;
+    socket.on('connect', function() {
+      console.log('on connect');
+      socket.on('name', function(username) {
+        console.log('recieved a msg on client: ' + username );
+        $scope.hits.push(username);
+      });
     });
+}]);
+
+angular.module('app').factory('socket', [ function() {
+  var socket = {};
+
+  socket._socket = io();
+
+  socket.emit = function(_event, data) {
+    console.log('socket emitting on' + _event);
+    socket._socket.emit(_event, data);
+  }
+
+  socket.on = function(_event, func) {
+      return socket._socket.on(_event, func);
+  }
+
+  return socket;
 }]);
 
 angular.module('app').factory('search', [ 'urls', '$http', function(urls, $http) {
