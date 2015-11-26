@@ -13,15 +13,23 @@
 				  <input class="form-control" type="text" name="name" ng-model="name">
 				</div>
 			</div>
-			<a ng-repeat="hit in hits" href="{{hit}}" ng-cloak>{{hit}}</a>
-			<p ng-if="hits == false">Nothing was found...</p>
+			<div class ="row">
+				<div class="col-lg-4 col-lg-offset-4">
+					<ul>
+						<li ng-repeat="hit in hits" ng-cloak><a href="{{hit}}">{{hit.username}}</a></li>
+					</ul>
+					<p ng-if="hits == false">Nothing was found...</p>
+				</div>
+			</div>
 	</form>
 </div>
 
 <!-- jquery -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/socket.io-client/socket.io.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
 <script src="app.js"></script>
 
 <!-- bootstrap js -->
