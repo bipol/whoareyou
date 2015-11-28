@@ -9,7 +9,7 @@ app.use(express.static(__dirname + '/src/'));
 app.use(cors());
 
 //create server
-var server = app.listen(8000, function () {
+var server = app.listen(process.env.PORT || 8000, function () {
 	var host = "127.0.0.1";
 	var port = server.address().port;
 
