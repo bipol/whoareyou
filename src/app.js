@@ -7,15 +7,18 @@ angular.module('app', [
 angular.module('app').controller('searchCtrl', [ '$scope', 'search', 'socket', function($scope, search, socket) {
 
     $scope.hits = [];
+    $scope.searching = false;
 
     $scope.submit = function(name) {
       socket.emit('usernames', {'name': name});
+      $scope.searching = true;
     };
 
     socket.on('connect', function() {
       console.log('on connect');
       socket.on('name', function(username) {
         console.log('recieved a msg on client: ' + username.username );
+        $scope.searching = false;
         $scope.hits.push(username);
         $scope.$digest();
       });

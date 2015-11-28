@@ -19,6 +19,7 @@
 						<li ng-repeat="hit in hits" ng-cloak><a href="{{hit}}">{{hit.username}}</a></li>
 					</ul>
 					<p ng-if="hits == false">Nothing was found...</p>
+					<p ng-if="searching == true">Searching...</p>
 				</div>
 			</div>
 	</form>
