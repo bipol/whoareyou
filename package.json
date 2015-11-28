@@ -4,6 +4,7 @@
   "description": "web application that snoops on users",
   "main": "server.js",
   "dependencies": {
+    "bower": "^1.6.8",
     "express": "^4.13.1",
     "q": "^1.4.1",
     "socket.io": "^1.3.7"
@@ -14,6 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
+    "postinstall": "./install.sh"
   },
   "author": "bipol",
   "license": "MIT"
