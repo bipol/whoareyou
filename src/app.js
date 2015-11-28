@@ -15,8 +15,9 @@ angular.module('app').controller('searchCtrl', [ '$scope', 'search', 'socket', f
     socket.on('connect', function() {
       console.log('on connect');
       socket.on('name', function(username) {
-        console.log('recieved a msg on client: ' + username );
+        console.log('recieved a msg on client: ' + username.username );
         $scope.hits.push(username);
+        $scope.$digest();
       });
     });
 }]);
