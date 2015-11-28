@@ -5,7 +5,8 @@ var q = require('q');
 var app = express();
 
 //static
-app.use(express.static(__dirname + '/src/'));
+app.use(express.static(__dirname + "/src/"));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 app.use(cors());
 
 //create server
