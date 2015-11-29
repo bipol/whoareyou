@@ -1,38 +1,39 @@
 <!DOCTYPE html>
-
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/my.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+</head>
 <!-- bootstrap -->
-<link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="css/my.css" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-
-<div class="container center" ng-app="app">
-	<h1> who are you? </h1>
-	<form id="search" ng-controller="searchCtrl" ng-submit="submit(name)">
-			<div class="row">
-				<div class="form-group col-lg-4 col-lg-offset-4">
-				  <input class="form-control" type="text" name="name" ng-model="name">
+<body>
+	<div class="container center" ng-app="app">
+		<form id="search" ng-controller="searchCtrl" ng-submit="submit(name)">
+				<div class="row">
+					<div class="form-group col-lg-6 col-lg-offset-3">
+						<h1 class="question"> who are you? </h1>
+					  <input class="form-control" type="text" name="name" ng-model="name">
+					</div>
 				</div>
-			</div>
-			<div class ="row">
-				<div class="col-lg-4 col-lg-offset-4">
-					<ul>
-						<li ng-repeat="hit in hits" ng-cloak><a href="{{hit}}">{{hit.username}}</a></li>
-					</ul>
-					<p ng-if="hits == false">Nothing was found...</p>
-					<p ng-if="searching == true">Searching...</p>
+				<div class ="row">
+					<div class="col-lg-6 col-lg-offset-3">
+							<p class="answer" ng-repeat="hit in hits" ng-cloak><a href="{{hit}}">{{hit.username}}</a></p>
+						<p class="answer" ng-if="hits == false">Nothing was found...</p>
+						<p class="answer" ng-if="searching == true">Searching...</p>
+					</div>
 				</div>
-			</div>
-	</form>
-</div>
+		</form>
+	</div>
 
-<!-- jquery -->
-<script src="/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/bower_components/angular/angular.min.js"></script>
-<script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script src="/bower_components/socket.io-client/socket.io.js"></script>
-<script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	<!-- jquery -->
+	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/bower_components/angular/angular.min.js"></script>
+	<script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="/bower_components/socket.io-client/socket.io.js"></script>
+	<script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
-<script src="app.js"></script>
+	<script src="app.js"></script>
 
-<!-- bootstrap js -->
-<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!-- bootstrap js -->
+	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
