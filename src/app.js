@@ -6,6 +6,7 @@ angular.module('app', [
 
 angular.module('app').controller('searchCtrl', [ '$scope', 'search', 'socket', function($scope, search, socket) {
 
+    $scope.name = 'username'; //default value for the form
     $scope.hits = [];
     $scope.searching = false;
 
