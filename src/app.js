@@ -22,7 +22,7 @@ angular.module('app').controller('searchCtrl', [ '$scope', 'search', 'socket', f
         if (username.username == 'finished') {
           $scope.searching = false;
         } else {
-          $scope.hits.push(username);
+          $scope.hits.push(username.username);
         }
         $scope.$digest();
       });
