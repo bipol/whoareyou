@@ -19,8 +19,11 @@ angular.module('app').controller('searchCtrl', [ '$scope', 'search', 'socket', f
       console.log('on connect');
       socket.on('name', function(username) {
         console.log('recieved a msg on client: ' + username.username );
-        $scope.searching = false;
-        $scope.hits.push(username);
+        if (username.username == 'finished') {
+          $scope.searching = false;
+        } else {
+          $scope.hits.push(username);
+        }
         $scope.$digest();
       });
     });

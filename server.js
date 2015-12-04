@@ -40,7 +40,9 @@ app.io.on('connection', function(socket) {
   	for (url in urls) {
   		promises.push(query_url(url, name, socket));
   	}
-    q.all(promises);
+    q.all(promises).then(function() {
+			socket.emit('name', {'username': 'finished'});
+		});
   });
 });
 
