@@ -51,7 +51,14 @@ urls = {
   "twitter": "https://www.twitter.com/",
   "instagram": "https://www.instagram.com/",
   "youtube": "https://www.youtube.com/",
-  "imgur": "https://www.imgur.com/"
+  "imgur": "https://www.imgur.com/",
+	// why don't porn websites have https yet?? come on guys!
+  // "pornhub": "https://www.pornhub.com/users/",
+  // "xvideos": "https://www.xvideos.com/profiles/",
+  // "xhamster": "https://xhamster.com/user/",
+  "pinterest": "https://www.pinterest.com/",
+  "google+": "https://plus.google.com/+",
+  "flickr": "https://www.flickr.com/photos/"
 }
 //routes
 app.get('/', function(req, res) {
