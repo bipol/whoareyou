@@ -1,8 +1,7 @@
 var express = require('express');
 var cors = require('cors');
-var https = require('https');
-var http = require('http');
 var q = require('q');
+var request = require('request');
 var app = express();
 
 //static
@@ -38,8 +37,8 @@ app.io.on('connection', function(socket) {
 
     console.log('received message on usernames ' + data.name);
     var promises = [];
-  	for (key in urls) {
-  		promises.push(query_url(urls[key].url, name, socket, urls[key].protocol));
+  	for (site in urls) {
+  		promises.push(query_url(urls[site], name, socket));
   	}
     q.all(promises).then(function() {
 			socket.emit('name', {'username': 'finished'});
@@ -68,7 +67,6 @@ urls = {
 		url: "https://www.imgur.com/",
 		protocol: 'https',
 	},
-	// why don't porn websites have https yet?? come on guys!
   "pornhub": {
 		url: "http://www.pornhub.com/users/",
 		protocol: 'http',
@@ -94,72 +92,24 @@ urls = {
 		protocol: 'https',
 	},
 }
+
 //routes
 app.get('/', function(req, res) {
   res.sendFile('./src/index.html');
 });
 
 // function that returns promises to handle the urls
-var query_url = function(url, name, socket, protocol) {
+var query_url = function(site, name, socket) {
   var deferred = q.defer();
-  // query = urls[url] + name;
-	if (protocol === 'http') {
-	  http.get(urls[url] + name, function(response) {
-	    //handle a redirect
-	    if (response.statusCode > 300 && response.statusCode < 400 && response.headers.location) {
-	  	   http.get(response.headers.location, function(response2) {
-	    		if (response2.statusCode == 200) {
-	          console.log('emitting ' + url);
-	          socket.emit('name', {'username': urls[url] + name})
-	          deferred.resolve();
-	    		} else {
-	    			deferred.resolve();
-	    		}
-	    	});
-	    } else {
-	    	if (response.statusCode == 200) {
-	        console.log('emitting ' + url);
-	        socket.emit('name', {'username': urls[url] + name})
-	    		deferred.resolve();
-	    	} else {
-	    		deferred.resolve();
-	    	}
-	    }
-	  });
-	} else {
-	  https.get(urls[url] + name, function(response) {
-	  //handle a redirect
-	    if (response.statusCode > 300 && response.statusCode < 400 && response.headers.location) {
-	  	   https.get(response.headers.location, function(response2) {
-	    		if (response2.statusCode == 200) {
-	          console.log('emitting ' + url);
-	          socket.emit('name', {'username': urls[url] + name})
-	          deferred.resolve();
-	    		} else {
-	    			deferred.resolve();
-	    		}
-	    	});
-	    } else {
-	    	if (response.statusCode == 200) {
-	        console.log('emitting ' + url);
-	        socket.emit('name', {'username': urls[url] + name})
-	    		deferred.resolve();
-	    	} else {
-	    		deferred.resolve();
-	    	}
-	    }
-	  });
-	}
+	console.log(site);
+  request(site.url + name, {timeout: 2000}, function(error, response, body) {
+  	if (!error && response.statusCode == 200) {
+      console.log('emitting ' + site.url + name);
+      socket.emit('name', {'username': site.url + name})
+  		deferred.resolve();
+  	} else {
+  		deferred.resolve();
+  	}
+  });
   return deferred.promise;
 };
-
-app.get('/api/get_hits', function(req, res) {
-	name = req.query.user;
-	var promises = [];
-	for (url in urls) {
-		promises.push(query_url(url, name));
-	}
-	q.all(promises).then(function(val) {
-		res.send(val);
-	});
-});
