@@ -1,0 +1,35 @@
+{
+  "reddit":  {
+		"url": "https://www.reddit.com/user/"
+	},
+  "twitter":  {
+		"url": "https://www.twitter.com/"
+	},
+  "instagram":  {
+		"url": "https://www.instagram.com/"
+	},
+  "youtube":  {
+		"url": "https://www.youtube.com/"
+	},
+  "imgur": {
+		"url": "https://www.imgur.com/"
+	},
+  "pornhub": {
+		"url": "http://www.pornhub.com/users/"
+	},
+  "xvideos": {
+		"url": "http://www.xvideos.com/profiles/"
+	},
+  "xhamster": {
+		"url": "http://xhamster.com/user/"
+	},
+  "pinterest": {
+		"url": "https://www.pinterest.com/"
+	},
+  "google+": {
+		"url": "https://plus.google.com/+"
+	},
+  "flickr": {
+		"url": "https://www.flickr.com/photos/"
+	}
+}

@@ -1,109 +1,60 @@
+
 var express = require('express');
 var cors = require('cors');
-var http = require('https');
 var q = require('q');
+var request = require('request');
+var urls = require('./urls.json')
+
 var app = express();
+var onConnection = onConnection;
+var queryUrl = queryUrl;
+
+//create server
+var server = app.listen(process.env.PORT || 8000, function () {
+	var host = "127.0.0.1";
+	var port = server.address().port;
+	console.log('whoareyou listening at http://%s:%s', host, port);
+});
 
 //static
 app.use(express.static(__dirname + "/src/"));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 app.use(cors());
 
-//create server
-var server = app.listen(process.env.PORT || 8000, function () {
-	var host = "127.0.0.1";
-	var port = server.address().port;
-
-	console.log('Example app listening at http://%s:%s', host, port);
-});
-
 app.io = require('socket.io')(server);
+app.io.on('connection', onConnection);
 
-app.io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-      console.log('user disconnected');
-  });
-});
-
-app.io.on('connection', function(socket) {
-
-  socket.on('name', function(data) {
-    console.log('name' + data);
-  });
-
-  socket.on('usernames', function(data) {
-    var name = data.name;
-
-    console.log('recieved message on usernames ' + data.name);
-    var promises = [];
-  	for (url in urls) {
-  		promises.push(query_url(url, name, socket));
-  	}
-    q.all(promises).then(function() {
-			socket.emit('name', {'username': 'finished'});
-		});
-  });
-});
-
-urls = {
-  "reddit": "https://www.reddit.com/user/",
-  "twitter": "https://www.twitter.com/",
-  "instagram": "https://www.instagram.com/",
-  "youtube": "https://www.youtube.com/",
-  "imgur": "https://www.imgur.com/",
-	// why don't porn websites have https yet?? come on guys!
-  // "pornhub": "https://www.pornhub.com/users/",
-  // "xvideos": "https://www.xvideos.com/profiles/",
-  // "xhamster": "https://xhamster.com/user/",
-  "pinterest": "https://www.pinterest.com/",
-  "google+": "https://plus.google.com/+",
-  "flickr": "https://www.flickr.com/photos/"
-}
 //routes
 app.get('/', function(req, res) {
   res.sendFile('./src/index.html');
 });
 
-//TODO: either return a promise, or use Futures.sequence to make it synchronous.
+function onConnection(socket) {
+  socket.on('usernames', function(data) {
+    var name = data.name;
 
-// function that returns promises to handle the urls
-var query_url = function(url, name, socket) {
+    console.log('received message on usernames ' + data.name);
+    var promises = [];
+  	for (site in urls) {
+  		promises.push(queryUrl(urls[site], name, socket));
+  	}
+    q.all(promises).then(function() {
+			socket.emit('name', {'username': 'finished'});
+		});
+  });
+}
+
+function queryUrl(site, name, socket) {
   var deferred = q.defer();
-  // query = urls[url] + name;
-  http.get(urls[url] + name, function(response) {
-    //handle a redirect
-    if (response.statusCode > 300 && response.statusCode < 400 && response.headers.location) {
-  	   http.get(response.headers.location, function(response2) {
-    		if (response2.statusCode == 200) {
-          console.log('emitting ' + url);
-          socket.emit('name', {'username': urls[url] + name})
-          deferred.resolve();
-    		} else {
-    			deferred.resolve();
-    		}
-    	});
-    } else {
-    	if (response.statusCode == 200) {
-        console.log('emitting ' + url);
-        socket.emit('name', {'username': urls[url] + name})
-    		deferred.resolve();
-    	} else {
-    		deferred.resolve();
-    	}
-    }
-
+	console.log(site);
+  request(site.url + name, {timeout: 2000}, function(error, response, body) {
+  	if (!error && response.statusCode == 200) {
+      console.log('emitting ' + site.url + name);
+      socket.emit('name', {'username': site.url + name})
+  		deferred.resolve();
+  	} else {
+  		deferred.resolve();
+  	}
   });
   return deferred.promise;
-};
-
-app.get('/api/get_hits', function(req, res) {
-	name = req.query.user;
-	var promises = [];
-	for (url in urls) {
-		promises.push(query_url(url, name));
-	}
-	q.all(promises).then(function(val) {
-		res.send(val);
-	});
-});
+}
