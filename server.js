@@ -1,6 +1,7 @@
 var express = require('express');
 var cors = require('cors');
-var http = require('https');
+var https = require('https');
+var http = require('http');
 var q = require('q');
 var app = express();
 
@@ -35,10 +36,10 @@ app.io.on('connection', function(socket) {
   socket.on('usernames', function(data) {
     var name = data.name;
 
-    console.log('recieved message on usernames ' + data.name);
+    console.log('received message on usernames ' + data.name);
     var promises = [];
-  	for (url in urls) {
-  		promises.push(query_url(url, name, socket));
+  	for (key in urls) {
+  		promises.push(query_url(urls[key].url, name, socket, urls[key].protocol));
   	}
     q.all(promises).then(function() {
 			socket.emit('name', {'username': 'finished'});
@@ -47,53 +48,108 @@ app.io.on('connection', function(socket) {
 });
 
 urls = {
-  "reddit": "https://www.reddit.com/user/",
-  "twitter": "https://www.twitter.com/",
-  "instagram": "https://www.instagram.com/",
-  "youtube": "https://www.youtube.com/",
-  "imgur": "https://www.imgur.com/",
+  "reddit":  {
+		url: "https://www.reddit.com/user/",
+		protocol: 'https',
+	},
+  "twitter":  {
+		url: "https://www.twitter.com/",
+		protocol: 'https',
+	},
+  "instagram":  {
+		url: "https://www.instagram.com/",
+		protocol: 'https',
+	},
+  "youtube":  {
+		url: "https://www.youtube.com/",
+		protocol: 'https',
+	},
+  "imgur": {
+		url: "https://www.imgur.com/",
+		protocol: 'https',
+	},
 	// why don't porn websites have https yet?? come on guys!
-  // "pornhub": "https://www.pornhub.com/users/",
-  // "xvideos": "https://www.xvideos.com/profiles/",
-  // "xhamster": "https://xhamster.com/user/",
-  "pinterest": "https://www.pinterest.com/",
-  "google+": "https://plus.google.com/+",
-  "flickr": "https://www.flickr.com/photos/"
+  "pornhub": {
+		url: "http://www.pornhub.com/users/",
+		protocol: 'http',
+	},
+  "xvideos": {
+		url: "http://www.xvideos.com/profiles/",
+		protocol: 'http',
+	},
+  "xhamster": {
+		url: "http://xhamster.com/user/",
+		protocol: 'http',
+	},
+  "pinterest": {
+		url: "https://www.pinterest.com/",
+		protocol: 'https',
+	},
+  "google+": {
+		url: "https://plus.google.com/+",
+		protocol: 'https',
+	},
+  "flickr": {
+		url: "https://www.flickr.com/photos/",
+		protocol: 'https',
+	},
 }
 //routes
 app.get('/', function(req, res) {
   res.sendFile('./src/index.html');
 });
 
-//TODO: either return a promise, or use Futures.sequence to make it synchronous.
-
 // function that returns promises to handle the urls
-var query_url = function(url, name, socket) {
+var query_url = function(url, name, socket, protocol) {
   var deferred = q.defer();
   // query = urls[url] + name;
-  http.get(urls[url] + name, function(response) {
-    //handle a redirect
-    if (response.statusCode > 300 && response.statusCode < 400 && response.headers.location) {
-  	   http.get(response.headers.location, function(response2) {
-    		if (response2.statusCode == 200) {
-          console.log('emitting ' + url);
-          socket.emit('name', {'username': urls[url] + name})
-          deferred.resolve();
-    		} else {
-    			deferred.resolve();
-    		}
-    	});
-    } else {
-    	if (response.statusCode == 200) {
-        console.log('emitting ' + url);
-        socket.emit('name', {'username': urls[url] + name})
-    		deferred.resolve();
-    	} else {
-    		deferred.resolve();
-    	}
-    }
-
-  });
+	if (protocol === 'http') {
+	  http.get(urls[url] + name, function(response) {
+	    //handle a redirect
+	    if (response.statusCode > 300 && response.statusCode < 400 && response.headers.location) {
+	  	   http.get(response.headers.location, function(response2) {
+	    		if (response2.statusCode == 200) {
+	          console.log('emitting ' + url);
+	          socket.emit('name', {'username': urls[url] + name})
+	          deferred.resolve();
+	    		} else {
+	    			deferred.resolve();
+	    		}
+	    	});
+	    } else {
+	    	if (response.statusCode == 200) {
+	        console.log('emitting ' + url);
+	        socket.emit('name', {'username': urls[url] + name})
+	    		deferred.resolve();
+	    	} else {
+	    		deferred.resolve();
+	    	}
+	    }
+	  });
+	} else {
+	  https.get(urls[url] + name, function(response) {
+	  //handle a redirect
+	    if (response.statusCode > 300 && response.statusCode < 400 && response.headers.location) {
+	  	   https.get(response.headers.location, function(response2) {
+	    		if (response2.statusCode == 200) {
+	          console.log('emitting ' + url);
+	          socket.emit('name', {'username': urls[url] + name})
+	          deferred.resolve();
+	    		} else {
+	    			deferred.resolve();
+	    		}
+	    	});
+	    } else {
+	    	if (response.statusCode == 200) {
+	        console.log('emitting ' + url);
+	        socket.emit('name', {'username': urls[url] + name})
+	    		deferred.resolve();
+	    	} else {
+	    		deferred.resolve();
+	    	}
+	    }
+	  });
+	}
   return deferred.promise;
 };
 
