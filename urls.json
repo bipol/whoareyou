@@ -34,5 +34,9 @@
   "flickr": {
 		"url": "https://www.flickr.com/photos/",
     "nsfw": false
+	},
+  "Keybase": {
+		"url": "https://keybase.io/",
+    "nsfw": false
 	}
 }
