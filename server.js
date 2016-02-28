@@ -49,8 +49,8 @@ function queryUrl(site, name, socket) {
 	console.log(site);
   request(site.url + name, {timeout: 2000}, function(error, response, body) {
   	if (!error && response.statusCode == 200) {
-      console.log('emitting ' + site.url + name);
-      socket.emit('name', {'username': site.url + name})
+      console.log('emitting ' + site.url + name, site.nsfw);
+      socket.emit('name', {'username': site.url + name, 'nsfw': site.nsfw})
   		deferred.resolve();
   	} else {
   		deferred.resolve();

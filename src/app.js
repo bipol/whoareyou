@@ -11,21 +11,22 @@
 
 	  $scope.name = 'username'; //default value for the form
 	  $scope.hits = [];
+		$scope.nsfw = false;
 	  $scope.searching = false;
 	  $scope.submit = submit;
 	  socket.on('connect', onConnect);
 
 	  function submit(name) {
-	  socket.emit('usernames', {'name': name});
-	    $scope.searching = true;
+		  socket.emit('usernames', {'name': name});
+		    $scope.searching = true;
 	  }
 
 	  function onConnect() {
 	    socket.on('name', function(username) {
 	      if (username.username == 'finished') {
-		$scope.searching = false;
+					$scope.searching = false;
 	      } else {
-		$scope.hits.push(username.username);
+					$scope.hits.push({'url': username.username, 'nsfw': username.nsfw});
 	      }
 	      $scope.$digest();
 	    });
@@ -67,7 +68,7 @@
 	    for (url in urls) {
 	      $http.get(urls[url].api, { params: { user: name } }).then( function(response) {
 		if (response.data == false) {
-		  search.hits.push(urls[url].page + name);
+		  search.hits.push({'url': urls[url].page + name});
 		}
 	      });
 	    }
@@ -82,4 +83,3 @@
 	  "reddit": {'api': "https://www.reddit.com/api/username_available.json", 'page': "http://www.reddit.com/u/"},
 	});
 })();
-

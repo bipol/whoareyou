@@ -1,35 +1,46 @@
 {
   "reddit":  {
-		"url": "https://www.reddit.com/user/"
+		"url": "https://www.reddit.com/user/",
+    "nsfw": false
 	},
   "twitter":  {
-		"url": "https://www.twitter.com/"
+		"url": "https://www.twitter.com/",
+    "nsfw": false
 	},
   "instagram":  {
-		"url": "https://www.instagram.com/"
+		"url": "https://www.instagram.com/",
+    "nsfw": false
 	},
   "youtube":  {
-		"url": "https://www.youtube.com/"
+		"url": "https://www.youtube.com/",
+    "nsfw": false
 	},
   "imgur": {
-		"url": "https://www.imgur.com/"
+		"url": "https://www.imgur.com/",
+    "nsfw": false
 	},
   "pornhub": {
-		"url": "http://www.pornhub.com/users/"
+		"url": "http://www.pornhub.com/users/",
+    "nsfw": true
 	},
   "xvideos": {
-		"url": "http://www.xvideos.com/profiles/"
+		"url": "http://www.xvideos.com/profiles/",
+    "nsfw": true
 	},
   "xhamster": {
-		"url": "http://xhamster.com/user/"
+		"url": "http://xhamster.com/user/",
+    "nsfw": true
 	},
   "pinterest": {
-		"url": "https://www.pinterest.com/"
+		"url": "https://www.pinterest.com/",
+    "nsfw": false
 	},
   "google+": {
-		"url": "https://plus.google.com/+"
+		"url": "https://plus.google.com/+",
+    "nsfw": false
 	},
   "flickr": {
-		"url": "https://www.flickr.com/photos/"
+		"url": "https://www.flickr.com/photos/",
+    "nsfw": false
 	}
 }
