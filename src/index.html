@@ -8,22 +8,36 @@
 <!-- bootstrap -->
 <body>
 	<div class="container center" ng-app="app">
-		<form id="search" ng-controller="searchCtrl" ng-submit="submit(name)">
-				<div class="row">
-					<div class="form-group col-lg-6 col-lg-offset-3">
-						<h1 class="question"> who are you? </h1>
-					  <input class="form-control" type="text" name="name" ng-model="name">
-					</div>
+		<div ng-controller="searchCtrl">
+			<div class="row">
+				<div class="form-group col-lg-6 col-lg-offset-3">
+					<h1 class="question"> who are you? </h1>
 				</div>
-				<div class ="row">
-					<div class="col-lg-6 col-lg-offset-3">
-							<p class="answer" ng-repeat="hit in hits track by $index" ng-cloak><a href="{{hit}}">{{hit}}</a></p>
-						<p class="answer" ng-if="hits == false">Nothing was found...</p>
-						<p class="answer" ng-if="searching == true">Searching...</p>
-						<p class="answer"><a href="http://www.bipol.me">bipol</a> · <a href="http://www.syndrisoftware.com">syndri</a> · <a href="http://www.github.com/bipolalam/whoareyou">github</a></p>
-					</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-lg-6 col-lg-offset-3">
+					<form id="search" ng-submit="submit(name)">
+						<div class="form-group">
+						  <input class="form-control" type="text" name="name" ng-model="name">
+						</div>
+						<div class="form-inline">
+							<div class="form-group">
+								<label for="nsfw">Show NSFW</label>
+								<input class="form-control nsfw" type="checkbox" ng-model="nsfw" id="nsfw">
+							</div>
+						</div>
+					</form>
 				</div>
-		</form>
+			</div>
+			<div class ="row">
+				<div class="col-lg-6 col-lg-offset-3">
+					<p class="answer" ng-repeat="hit in hits track by $index" ng-if="!hit.nsfw || hit.nsfw == nsfw" ng-cloak><a href="{{hit.url}}">{{hit.url}}</a></p>
+					<p class="answer" ng-if="hits == false">Nothing was found...</p>
+					<p class="answer" ng-if="searching == true">Searching...</p>
+					<p class="answer"><a href="http://www.bipol.me">bipol</a> · <a href="http://www.syndrisoftware.com">syndri</a> · <a href="http://www.github.com/bipolalam/whoareyou">github</a></p>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<!-- jquery -->
