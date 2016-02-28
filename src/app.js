@@ -56,29 +56,6 @@
 })();
 
 (function() {
-	angular.module('app').factory('search', [ 'urls', '$http',
-	function(urls, $http) {
-
-	  search = {};
-	  search.hits = [];
-	  search.whois = whois;
-
-	  function whois(name) {
-	    search.hits = [];
-	    for (url in urls) {
-	      $http.get(urls[url].api, { params: { user: name } }).then( function(response) {
-		if (response.data == false) {
-		  search.hits.push({'url': urls[url].page + name});
-		}
-	      });
-	    }
-	  };
-
-	  return search;
-	}]);
-})();
-
-(function() {
 	angular.module('app').constant('urls', {
 	  "reddit": {'api': "https://www.reddit.com/api/username_available.json", 'page': "http://www.reddit.com/u/"},
 	});
