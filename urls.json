@@ -38,5 +38,9 @@
   "Keybase": {
 		"url": "https://keybase.io/",
     "nsfw": false
+	},
+  "Medium": {
+		"url": "https://medium.com/@",
+    "nsfw": false
 	}
 }
