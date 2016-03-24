@@ -8,7 +8,7 @@
 	function($stateProvider) {
 		$stateProvider.state('hits', {
 			  templateUrl: 'templates/hits.html',
-				url: '/hits/:name',
+				url: '/whois/:name',
 				resolve: {
 					socket: 'socket',
 					$state: '$state',
