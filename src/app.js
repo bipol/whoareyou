@@ -54,9 +54,3 @@
 	  return socket;
 	}]);
 })();
-
-(function() {
-	angular.module('app').constant('urls', {
-	  "reddit": {'api': "https://www.reddit.com/api/username_available.json", 'page': "http://www.reddit.com/u/"},
-	});
-})();
