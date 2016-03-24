@@ -31,9 +31,11 @@
 			</div>
 			<div class ="row">
 				<div class="col-lg-6 col-lg-offset-3">
-					<p class="answer" ng-repeat="hit in hits track by $index" ng-if="!hit.nsfw || hit.nsfw == nsfw" ng-cloak><a href="{{hit.url}}">{{hit.url}}</a></p>
+					<div ui-view>
+					</div>
+					<!-- <p class="answer" ng-repeat="hit in hits track by $index" ng-if="!hit.nsfw || hit.nsfw == nsfw" ng-cloak><a href="{{hit.url}}">{{hit.url}}</a></p>
 					<p class="answer" ng-if="hits == false">Nothing was found...</p>
-					<p class="answer" ng-if="searching == true">Searching...</p>
+					<p class="answer" ng-if="searching == true">Searching...</p> -->
 					<p class="answer"><a href="http://www.bipol.me">bipol</a> · <a href="http://www.syndrisoftware.com">syndri</a> · <a href="http://www.github.com/bipolalam/whoareyou">github</a></p>
 				</div>
 			</div>

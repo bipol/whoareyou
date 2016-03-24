@@ -3,11 +3,29 @@
 	  'ui.bootstrap',
 	  'ui.router'
 	]);
+
+	angular.module('app').config([ '$stateProvider',
+	function($stateProvider) {
+		$stateProvider.state('hits', {
+			  templateUrl: 'templates/hits.html',
+				url: '/hits/:name',
+				resolve: {
+					socket: 'socket',
+					$state: '$state',
+					name: function($stateParams) {
+						return $stateParams.name;
+					}
+				},
+				onEnter: function(socket, name) {
+					socket.emit('usernames', {'name': name});
+				}
+			});
+	}]);
 })();
 
 (function() {
-	angular.module('app').controller('searchCtrl', [ '$scope', 'search', 'socket',
-	function($scope, search, socket) {
+	angular.module('app').controller('searchCtrl', [ '$scope', 'socket', '$state',
+	function($scope, socket, $state) {
 
 	  $scope.name = 'username'; //default value for the form
 	  $scope.hits = [];
@@ -17,8 +35,11 @@
 	  socket.on('connect', onConnect);
 
 	  function submit(name) {
-		  socket.emit('usernames', {'name': name});
-		    $scope.searching = true;
+		  // socket.emit('usernames', {'name': name});
+	    $scope.searching = true;
+			$state.go('hits', {
+				name: name
+			});
 	  }
 
 	  function onConnect() {
